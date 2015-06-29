@@ -117,10 +117,10 @@ inet_attrs(AttrName) ->
 %% @doc Returns the attributes required for a given inet port (UDP,
 %% SCTP, TCP). This form of attributes is standard for most comparison
 %% functions for processes in recon.
--spec inet_attrs(AttributeName, port()) -> {ok,recon:inet_attrs()}
-                                         | {error,term()} when
-      AttributeName :: 'recv_cnt' | 'recv_oct' | 'send_cnt' | 'send_oct'
-                     | 'cnt' | 'oct'.
+%-spec inet_attrs(AttributeName, port()) -> {ok,recon:inet_attrs()}
+%                                         | {error,term()} when
+%      AttributeName :: 'recv_cnt' | 'recv_oct' | 'send_cnt' | 'send_oct'
+%                     | 'cnt' | 'oct'.
 inet_attrs(Attr, Port) ->
     Attrs = case Attr of
         cnt -> [recv_cnt, send_cnt];
@@ -137,8 +137,8 @@ inet_attrs(Attr, Port) ->
 
 
 %% @doc Equivalent of `pid(X,Y,Z)' in the Erlang shell.
--spec triple_to_pid(N,N,N) -> pid() when
-    N :: non_neg_integer().
+%-spec triple_to_pid(N,N,N) -> pid() when
+%    N :: non_neg_integer().
 triple_to_pid(X, Y, Z) ->
     list_to_pid("<" ++ integer_to_list(X) ++ "." ++
                        integer_to_list(Y) ++ "." ++
@@ -178,12 +178,12 @@ term_to_port(N) when is_integer(N) ->
 
 %% @doc Calls a given function every `Interval' milliseconds and supports
 %% a map-like interface (each result is modified and returned)
--spec time_map(N, Interval, Fun, State, MapFun) -> [term()] when
-    N :: non_neg_integer(),
-    Interval :: pos_integer(),
-    Fun :: fun((State) -> {term(), State}),
-    State :: term(),
-    MapFun :: fun((_) -> term()).
+%-spec time_map(N, Interval, Fun, State, MapFun) -> [term()] when
+%    N :: non_neg_integer(),
+%    Interval :: pos_integer(),
+%    Fun :: fun((State) -> {term(), State}),
+%    State :: term(),
+%    MapFun :: fun((_) -> term()).
 time_map(0, _, _, _, _) ->
     [];
 time_map(N, Interval, Fun, State, MapFun) ->
@@ -193,13 +193,13 @@ time_map(N, Interval, Fun, State, MapFun) ->
 
 %% @doc Calls a given function every `Interval' milliseconds and supports
 %% a fold-like interface (each result is modified and accumulated)
--spec time_fold(N, Interval, Fun, State, FoldFun, Init) -> [term()] when
-    N :: non_neg_integer(),
-    Interval :: pos_integer(),
-    Fun :: fun((State) -> {term(), State}),
-    State :: term(),
-    FoldFun :: fun((term(), Init) -> Init),
-    Init :: term().
+%-spec time_fold(N, Interval, Fun, State, FoldFun, Init) -> [term()] when
+%    N :: non_neg_integer(),
+%    Interval :: pos_integer(),
+%    Fun :: fun((State) -> {term(), State}),
+%    State :: term(),
+%    FoldFun :: fun((term(), Init) -> Init),
+%    Init :: term().
 time_fold(0, _, _, _, _, Acc) ->
     Acc;
 time_fold(N, Interval, Fun, State, FoldFun, Init) ->
@@ -210,12 +210,12 @@ time_fold(N, Interval, Fun, State, FoldFun, Init) ->
 
 %% @doc Diffs two runs of erlang:statistics(scheduler_wall_time) and
 %% returns usage metrics in terms of cores and 0..1 percentages.
--spec scheduler_usage_diff(SchedTime, SchedTime) -> [{SchedulerId, Usage}] when
-    SchedTime :: [{SchedulerId, ActiveTime, TotalTime}],
-    SchedulerId :: pos_integer(),
-    Usage :: number(),
-    ActiveTime :: non_neg_integer(),
-    TotalTime :: non_neg_integer().
+%-spec scheduler_usage_diff(SchedTime, SchedTime) -> [{SchedulerId, Usage}] when
+%    SchedTime :: [{SchedulerId, ActiveTime, TotalTime}],
+%    SchedulerId :: pos_integer(),
+%    Usage :: number(),
+%    ActiveTime :: non_neg_integer(),
+%    TotalTime :: non_neg_integer().
 scheduler_usage_diff(First, Last) ->
     lists:map(
         fun({{I, A0, T0}, {I, A1, T1}}) -> {I, (A1 - A0)/(T1 - T0)} end,

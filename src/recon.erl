@@ -151,15 +151,15 @@
 
 %% @doc Equivalent to `info(<A.B.C>)' where `A', `B', and `C' are integers part
 %% of a pid
--spec info(N,N,N) -> [{info_type(), [{info_key(),term()}]},...] when
-      N :: non_neg_integer().
+%-spec info(N,N,N) -> [{info_type(), [{info_key(),term()}]},...] when
+%      N :: non_neg_integer().
 info(A,B,C) -> info(recon_lib:triple_to_pid(A,B,C)).
 
 %% @doc Equivalent to `info(<A.B.C>, Key)' where `A', `B', and `C' are integers part
 %% of a pid
--spec info(N,N,N, Key) -> term() when
-      N :: non_neg_integer(),
-      Key :: info_type() | [atom()] | atom().
+%-spec info(N,N,N, Key) -> term() when
+%      N :: non_neg_integer(),
+%      Key :: info_type() | [atom()] | atom().
 info(A,B,C, Key) -> info(recon_lib:triple_to_pid(A,B,C), Key).
 
 
@@ -174,8 +174,8 @@ info(A,B,C, Key) -> info(recon_lib:triple_to_pid(A,B,C), Key).
 %% another registry supported in the `{via, Module, Name}' syntax (must have a
 %% `Module:whereis_name/1' function). Pids can also be passed in as a string
 %% (`"<0.39.0>"') or a triple (`{0,39,0}') and will be converted to be used.
--spec info(pid_term()) -> [{info_type(), [{info_key(), Value}]},...] when
-      Value :: term().
+%-spec info(pid_term()) -> [{info_type(), [{info_key(), Value}]},...] when
+%      Value :: term().
 info(PidTerm) ->
     Pid = recon_lib:term_to_pid(PidTerm),
     [info(Pid, Type) || Type <- [meta, signals, location, memory_used, work]].
@@ -197,9 +197,9 @@ info(PidTerm) ->
 %%
 %% A fake attribute `binary_memory' is also available to return the
 %% amount of memory used by refc binaries for a process.
--spec info(pid_term(), info_type()) -> {info_type(), [{info_key(), term()}]}
-    ;     (pid_term(), [atom()]) -> [{atom(), term()}]
-    ;     (pid_term(), atom()) -> {atom(), term()}.
+%-spec info(pid_term(), info_type()) -> {info_type(), [{info_key(), term()}]}
+%    ;     (pid_term(), [atom()]) -> [{atom(), term()}]
+%    ;     (pid_term(), atom()) -> {atom(), term()}.
 info(PidTerm, meta) ->
     info_type(PidTerm, meta, [registered_name, dictionary, group_leader,
                               status]);
@@ -216,8 +216,8 @@ info(PidTerm, Keys) ->
     proc_info(recon_lib:term_to_pid(PidTerm), Keys).
 
 %% @private makes access to `info_type()' calls simpler.
--spec info_type(pid_term(), info_type(), [info_key()]) ->
-    {info_type(), [{info_key(), term()}]}.
+%-spec info_type(pid_term(), info_type(), [info_key()]) ->
+%    {info_type(), [{info_key(), term()}]}.
 info_type(PidTerm, Type, Keys) ->
     Pid = recon_lib:term_to_pid(PidTerm),
     {Type, proc_info(Pid, Keys)}.
@@ -256,9 +256,9 @@ proc_fake([_|T1], [H|T2]) ->
 %% @todo Implement this function so it only stores `Num' entries in
 %% memory at any given time, instead of as many as there are
 %% processes.
--spec proc_count(AttributeName, Num) -> [proc_attrs()] when
-      AttributeName :: atom(),
-      Num :: non_neg_integer().
+%-spec proc_count(AttributeName, Num) -> [proc_attrs()] when
+%      AttributeName :: atom(),
+%      Num :: non_neg_integer().
 proc_count(AttrName, Num) ->
     lists:sublist(lists:usort(
         fun({_,A,_},{_,B,_}) -> A > B end,
@@ -290,10 +290,10 @@ proc_count(AttrName, Num) ->
 %% Warning: this function depends on data gathered at two snapshots, and then
 %% building a dictionary with entries to differentiate them. This can take a
 %% heavy toll on memory when you have many dozens of thousands of processes.
--spec proc_window(AttributeName, Num, Milliseconds) -> [proc_attrs()] when
-      AttributeName :: atom(),
-      Num :: non_neg_integer(),
-      Milliseconds :: pos_integer().
+%-spec proc_window(AttributeName, Num, Milliseconds) -> [proc_attrs()] when
+%      AttributeName :: atom(),
+%      Num :: non_neg_integer(),
+%      Milliseconds :: pos_integer().
 proc_window(AttrName, Num, Time) ->
     Sample = fun() -> recon_lib:proc_attrs(AttrName) end,
     {First,Last} = recon_lib:sample(Time, Sample),
@@ -331,9 +331,9 @@ bin_leak(N) ->
         N).
 
 %% @doc Shorthand for `node_stats(N, Interval, fun(X,_) -> io:format("~p~n",[X]) end, nostate)'.
--spec node_stats_print(Repeat, Interval) -> term() when
-      Repeat :: non_neg_integer(),
-      Interval :: pos_integer().
+%-spec node_stats_print(Repeat, Interval) -> term() when
+%      Repeat :: non_neg_integer(),
+%      Interval :: pos_integer().
 node_stats_print(N, Interval) ->
     node_stats(N, Interval, fun(X, _) -> io:format("~p~n",[X]) end, ok).
 
@@ -355,10 +355,10 @@ node_stats_print(N, Interval) ->
 %% </ul>
 %%
 %% A scheduler isn't busy when doing anything else.
--spec scheduler_usage(Millisecs) -> [{SchedulerId, Usage}] when
-    Millisecs :: non_neg_integer(),
-    SchedulerId :: pos_integer(),
-    Usage :: number().
+%-spec scheduler_usage(Millisecs) -> [{SchedulerId, Usage}] when
+%    Millisecs :: non_neg_integer(),
+%    SchedulerId :: pos_integer(),
+%    Usage :: number().
 scheduler_usage(Interval) when is_integer(Interval) ->
     %% We start and stop the scheduler_wall_time system flag if
     %% it wasn't in place already. Usually setting the flag should
@@ -372,11 +372,11 @@ scheduler_usage(Interval) when is_integer(Interval) ->
 
 %% @doc Shorthand for `node_stats(N, Interval, fun(X,Acc) -> [X|Acc] end, [])'
 %% with the results reversed to be in the right temporal order.
--spec node_stats_list(Repeat, Interval) -> [Stats] when
-      Repeat :: non_neg_integer(),
-      Interval :: pos_integer(),
-      Stats :: {[Absolutes::{atom(),term()}],
-                [Increments::{atom(),term()}]}.
+%-spec node_stats_list(Repeat, Interval) -> [Stats] when
+%      Repeat :: non_neg_integer(),
+%      Interval :: pos_integer(),
+%      Stats :: {[Absolutes::{atom(),term()}],
+%                [Increments::{atom(),term()}]}.
 node_stats_list(N, Interval) ->
     lists:reverse(node_stats(N, Interval, fun(X,Acc) -> [X|Acc] end, [])).
 
@@ -394,13 +394,13 @@ node_stats_list(N, Interval) ->
 %% stop increasing: bytes in and out of the node, number of garbage colelctor
 %% runs, words of memory that were garbage collected, and the global reductions
 %% count for the node.
--spec node_stats(N, Interval, FoldFun, Acc) -> Acc when
-      N :: non_neg_integer(),
-      Interval :: pos_integer(),
-      FoldFun :: fun((Stats, Acc) -> Acc),
-      Acc :: term(),
-      Stats :: {[Absolutes::{atom(),term()}],
-                [Increments::{atom(),term()}]}.
+%-spec node_stats(N, Interval, FoldFun, Acc) -> Acc when
+%      N :: non_neg_integer(),
+%      Interval :: pos_integer(),
+%      FoldFun :: fun((Stats, Acc) -> Acc),
+%      Acc :: term(),
+%      Stats :: {[Absolutes::{atom(),term()}],
+%                [Increments::{atom(),term()}]}.
 node_stats(N, Interval, FoldFun, Init) ->
     %% Turn on scheduler wall time if it wasn't there already
     FormerFlag = erlang:system_flag(scheduler_wall_time, true),
@@ -484,8 +484,8 @@ remote_load(Mod) -> remote_load(nodes(), Mod).
 
 %% @doc Loads one or more modules remotely, in a diskless manner.  Allows to
 %% share code loaded locally with a remote node that doesn't have it
--spec remote_load(Nodes, module()) -> term() when
-      Nodes :: [node(),...] | node().
+%-spec remote_load(Nodes, module()) -> term() when
+%      Nodes :: [node(),...] | node().
 remote_load(Nodes=[_|_], Mod) when is_atom(Mod) ->
     {Mod, Bin, File} = code:get_object_code(Mod),
     rpc:multicall(Nodes, code, load_binary, [Mod, File, Bin]);
@@ -546,10 +546,10 @@ port_types() ->
 %% @todo Implement this function so it only stores `Num' entries in
 %% memory at any given time, instead of as many as there are
 %% processes.
--spec inet_count(AttributeName, Num) -> [inet_attrs()] when
-      AttributeName :: 'recv_cnt' | 'recv_oct' | 'send_cnt' | 'send_oct'
-                     | 'cnt' | 'oct',
-      Num :: non_neg_integer().
+%-spec inet_count(AttributeName, Num) -> [inet_attrs()] when
+%      AttributeName :: 'recv_cnt' | 'recv_oct' | 'send_cnt' | 'send_oct'
+%                     | 'cnt' | 'oct',
+%      Num :: non_neg_integer().
 inet_count(Attr, Num) ->
     lists:sublist(lists:usort(
         fun({_,A,_},{_,B,_}) -> A > B end,
@@ -568,11 +568,11 @@ inet_count(Attr, Num) ->
 %% of packets sent, received, or both (`send_cnt', `recv_cnt', `cnt',
 %% respectively). Individual absolute values for each metric will be returned
 %% in the 3rd position of the resulting tuple.
--spec inet_window(AttributeName, Num, Milliseconds) -> [inet_attrs()] when
-      AttributeName :: 'recv_cnt' | 'recv_oct' | 'send_cnt' | 'send_oct'
-                     | 'cnt' | 'oct',
-      Num :: non_neg_integer(),
-      Milliseconds :: pos_integer().
+%-spec inet_window(AttributeName, Num, Milliseconds) -> [inet_attrs()] when
+%      AttributeName :: 'recv_cnt' | 'recv_oct' | 'send_cnt' | 'send_oct'
+%                     | 'cnt' | 'oct',
+%      Num :: non_neg_integer(),
+%      Milliseconds :: pos_integer().
 inet_window(Attr, Num, Time) when is_atom(Attr) ->
     Sample = fun() -> recon_lib:inet_attrs(Attr) end,
     {First,Last} = recon_lib:sample(Time, Sample),

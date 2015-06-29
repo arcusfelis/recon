@@ -369,7 +369,7 @@ setup(TracerFun, TracerArgs) ->
     receive
         {Ref, linked} -> Tracer
     after 5000 ->
-        error(setup_failed)
+        erlang:error(setup_failed)
     end.
 
 %% Sets the traces in action
@@ -428,8 +428,8 @@ validate_tspec(Mod, Fun, Args) ->
     %% The banned mod check can be bypassed by using
     %% match specs if you really feel like being dumb.
     case {lists:member(Mod, BannedMods), Args} of
-        {true, '_'} -> error({dangerous_combo, {Mod,Fun,Args}});
-        {true, []} -> error({dangerous_combo, {Mod,Fun,Args}});
+        {true, '_'} -> erlang:error({dangerous_combo, {Mod,Fun,Args}});
+        {true, []} -> erlang:error({dangerous_combo, {Mod,Fun,Args}});
         _ -> ok
     end,
     case Args of

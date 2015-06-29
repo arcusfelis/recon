@@ -275,9 +275,9 @@ fragmentation(Keyword) ->
 %%
 %% The values returned by this function are sorted by a weight combining
 %% the lower cache hit joined to the largest memory values allocated.
--spec cache_hit_rates() -> [{{instance,instance()}, [{Key,Val}]}] when
-    Key :: hit_rate | hits | calls,
-    Val :: term().
+%-spec cache_hit_rates() -> [{{instance,instance()}, [{Key,Val}]}] when
+%    Key :: hit_rate | hits | calls,
+%    Val :: term().
 cache_hit_rates() ->
     WeighedData = [begin
       Mem = proplists:get_value(memkind, Props),
@@ -305,9 +305,9 @@ cache_hit_rates() ->
 %%
 %% Do note that values for `lmbcs' and `smbcs' are going to be rounded up
 %% to the next power of two when configuring them.
--spec average_block_sizes(current | max) -> [{allocator(), [{Key,Val}]}] when
-    Key :: mbcs | sbcs,
-    Val :: number().
+%-spec average_block_sizes(current | max) -> [{allocator(), [{Key,Val}]}] when
+%    Key :: mbcs | sbcs,
+%    Val :: number().
 average_block_sizes(Keyword) ->
     Dict = lists:foldl(fun({{Instance,_},Props},Dict0) ->
       CarSbcs = container_value(Props, Keyword, sbcs, blocks),
@@ -410,8 +410,8 @@ snapshot_get() ->
 %% @doc save the current snapshot taken by {@link snapshot/0} to a file.
 %% If there is no current snapshot, a snaphot of the current allocator
 %% statistics will be written to the file.
--spec snapshot_save(Filename) -> ok when
-      Filename :: file:name().
+%-spec snapshot_save(Filename) -> ok when
+%      Filename :: file:name().
 snapshot_save(Filename) ->
     Snapshot = case snapshot_get() of
                    undefined ->
@@ -451,8 +451,8 @@ snapshot_save(Filename) ->
 %%     2> recon_alloc:memory(used).
 %%     18411064'''
 %%
--spec snapshot_load(Filename) -> snapshot() | undefined when
-      Filename :: file:name().
+%-spec snapshot_load(Filename) -> snapshot() | undefined when
+%      Filename :: file:name().
 snapshot_load(Filename) ->
     {ok,[Terms]} = file:consult(Filename),
     Snapshot =
